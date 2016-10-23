@@ -55,7 +55,7 @@ def get_closest_bar(data, longitude, latitude):
     my_X = longitude
     my_Y = latitude
     bar_dict = []
-    for bar in json_data:
+    for bar in data:
         x = float(bar['Cells']['geoData']['coordinates'][0])
         y = float(bar['Cells']['geoData']['coordinates'][1])
         distance = sqrt((my_X - x) ** 2 + (my_Y - y) ** 2)
@@ -84,8 +84,8 @@ if __name__ == '__main__':
     get_smallest_bar(json_data)
     my_X = 37.193582
     my_Y = 56.005560
-    print('Вы хотите ввести координаты с клавиатуры \nили использовать координаты по умолчанию: %s, %s' % (my_Y, my_X))
-    if input("Yes/No \n") == "Yes":
+    print('Вы хотите ввести координаты с клавиатуры - 1\nИспользовать координаты по умолчанию: %s, %s - 2' % (my_Y, my_X))
+    if input(" 1 / 2  \n") == "1":
         my_Y = float(input("Широта: "))
         my_X = float(input("Долгота: "))
     get_closest_bar(json_data, my_X, my_Y)
