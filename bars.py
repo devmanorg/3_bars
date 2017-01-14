@@ -1,6 +1,5 @@
 import json
-import os
-import sys
+
 
 def load_data(filepath):
     with open(filepath) as bars_json:
@@ -14,7 +13,7 @@ def get_biggest_bar(bars_json):
         if bar['SeatsCount'] > max_seats:
             max_seats = bar['SeatsCount']
             biggest_bar = bar
-    return "Biggest bar is " +biggest_bar['Name']
+    return "Biggest bar is " + biggest_bar['Name']
 
 
 def get_smallest_bar(bars_json):
