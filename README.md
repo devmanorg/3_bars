@@ -8,7 +8,7 @@
 
 Запуск на Linux:
 
-```#!bash
+```bash
 
 $ python bars.py # possibly requires call of python3 executive instead of just python
 # FIXME вывести пример ответа скрипта
