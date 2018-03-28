@@ -17,5 +17,10 @@ def get_closest_bar(data, longitude, latitude):
     pass
 
 
+def main():
+    data = load_data('bars.json')
+
+
 if __name__ == '__main__':
+    main()
     pass
