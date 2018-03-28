@@ -2,6 +2,8 @@ import json
 
 
 def load_data(filepath):
+    with open(filepath, 'r') as file_handler:
+        return json.load(file_handler)
     pass
 
 
