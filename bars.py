@@ -53,8 +53,8 @@ if __name__ == '__main__':
         for adjective, feature in feature_list.items():
             bar_feature = feature(bar_list, longitude, latitude)
             print(
-                "Самый {0} бар – {1},".format(adjective,
-                                             bar_feature['properties']['Attributes']['Name']),
+                "Самый {0} бар – {1},"
+                .format(adjective, bar_feature['properties']['Attributes']['Name']),
                 "Мест: {},".format(bar_feature['properties']['Attributes']['SeatsCount']),
                 "Адрес: {}".format(bar_feature['properties']['Attributes']['Address'])
             )
