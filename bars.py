@@ -33,7 +33,7 @@ def get_closest_bar(bar_data, longitude, latitude):
     return closest_bar
 
 
-def print_answer():
+def print_answer(bar_list, longitude, latitude):
     feature_list = {
         'большой': get_biggest_bar,
         'маленький': get_smallest_bar,
@@ -48,7 +48,6 @@ def print_answer():
             "Адрес: {}".format(bar_feature['properties']['Attributes']['Address'])
         )
 
-    pass
 
 if __name__ == '__main__':
     try:
@@ -62,4 +61,4 @@ if __name__ == '__main__':
     except ValueError:
         print('Это не файл JSON')
     else:
-        print_answer()
+        print_answer(bar_list, longitude, latitude)
