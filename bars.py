@@ -33,17 +33,7 @@ def get_closest_bar(bar_data, longitude, latitude):
     return closest_bar
 
 
-if __name__ == '__main__':
-    try:
-        bar_list = load_data(sys.argv[1])
-        longitude = float(sys.argv[2])
-        latitude = float(sys.argv[3])
-    except IndexError:
-        print('Please specify all parameters')
-    except FileNotFoundError:
-        print('File not found')
-    except ValueError:
-        print('Not a valid JSON file')
+def print_answer():
     feature_list = {
         'большой': get_biggest_bar,
         'маленький': get_smallest_bar,
@@ -57,3 +47,19 @@ if __name__ == '__main__':
             "Мест: {},".format(bar_feature['properties']['Attributes']['SeatsCount']),
             "Адрес: {}".format(bar_feature['properties']['Attributes']['Address'])
         )
+
+    pass
+
+if __name__ == '__main__':
+    try:
+        bar_list = load_data(sys.argv[1])
+        longitude = float(sys.argv[2])
+        latitude = float(sys.argv[3])
+    except IndexError:
+        print('Пожалуйста укажите все параметры')
+    except FileNotFoundError:
+        print('Файл не найден')
+    except ValueError:
+        print('Это не файл JSON')
+    else:
+        print_answer()
