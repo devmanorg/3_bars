@@ -1,5 +1,6 @@
 import sys
 import json
+import inspect
 
 
 def load_data(filepath):
@@ -7,46 +8,36 @@ def load_data(filepath):
         return json.load(file_handler)['features']
 
 
-def get_biggest_bar(bar_data, *args):
-    biggest_bar = max(bar_data,
-                      key=lambda x: x['properties']['Attributes']['SeatsCount']
-                      )
+def get_biggest_bar(bar_data):
+    biggest_bar = max(bar_data, key=lambda x: x['properties']['Attributes']['SeatsCount'])
     return biggest_bar
 
 
-def get_smallest_bar(bar_data, *args):
-    smallest_bar = min(bar_data,
-                       key=lambda x: x['properties']['Attributes']['SeatsCount']
-                       )
+def get_smallest_bar(bar_data):
+    smallest_bar = min(bar_data, key=lambda x: x['properties']['Attributes']['SeatsCount'])
     return smallest_bar
 
 
-def get_closest_bar(bar_data, longitude, latitude):
-
-    def get_distance(bar_data, longitude, latitude):
+def get_distance(bar_data, longitude, latitude):
         longitude2, latitude2 = bar_data['geometry']['coordinates']
         distance = ((longitude2 - longitude) ** 2 +
                     (latitude2 - latitude) ** 2) ** 0.5
         return distance
 
+
+def get_closest_bar(bar_data, longitude, latitude):
     closest_bar = min(bar_data, key=lambda x: get_distance(x, longitude, latitude))
     return closest_bar
 
 
-def print_answer(bar_list, longitude, latitude):
-    feature_list = {
-        'большой': get_biggest_bar,
-        'маленький': get_smallest_bar,
-        'близкий': get_closest_bar
-    }
-    for adjective, feature in feature_list.items():
-        bar_feature = feature(bar_list, longitude, latitude)
-        print(
-            "Самый {0} бар – {1},"
-            .format(adjective, bar_feature['properties']['Attributes']['Name']),
-            "Мест: {},".format(bar_feature['properties']['Attributes']['SeatsCount']),
-            "Адрес: {}".format(bar_feature['properties']['Attributes']['Address'])
-        )
+def print_bar(category, bar_found):
+    print(
+        inspect.stack()[1].code_context,
+        category,
+        bar_found['properties']['Attributes']['Name'],
+        'Мест: {},'.format(bar_found['properties']['Attributes']['SeatsCount']),
+        'Адрес: {}'.format(bar_found['properties']['Attributes']['Address']),
+    )
 
 
 if __name__ == '__main__':
@@ -58,7 +49,9 @@ if __name__ == '__main__':
         print('Пожалуйста укажите все параметры')
     except FileNotFoundError:
         print('Файл не найден')
-    except ValueError:
-        print('Это не файл JSON')
+    # except ValueError:
+    #     print('Это не файл JSON')
     else:
-        print_answer(bar_list, longitude, latitude)
+        print_bar('Самый большой бар:', get_biggest_bar(bar_list))
+        # print_bar('Самый маленький бар:', get_smallest_bar(bar_list))
+        # print_bar('Самый близкий бар:', get_closest_bar(bar_list, longitude, latitude))
