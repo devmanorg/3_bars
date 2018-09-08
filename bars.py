@@ -30,13 +30,18 @@ def get_closest_bar(bar_data, longitude, latitude):
     return closest_bar
 
 
-def print_bar(category, bar_found):
+def print_bar(bar_found):
+    features = {
+        'biggest': 'большой',
+        'smallest': 'маленький',
+        'closest': 'близкий',
+    }
+    caller = inspect.stack()[1].code_context[0]
+    adj = [desc for feat, desc in features.items() if feat in caller][0]
     print(
-        inspect.stack()[1].code_context,
-        category,
-        bar_found['properties']['Attributes']['Name'],
-        'Мест: {},'.format(bar_found['properties']['Attributes']['SeatsCount']),
-        'Адрес: {}'.format(bar_found['properties']['Attributes']['Address']),
+        'Самый {0} бар: {1},'.format(adj, bar_found['properties']['Attributes']['Name']),
+        'мест: {0}'.format(bar_found['properties']['Attributes']['SeatsCount']),
+        '\nАдрес: {0}'.format(bar_found['properties']['Attributes']['Address']),
     )
 
 
@@ -49,9 +54,9 @@ if __name__ == '__main__':
         print('Пожалуйста укажите все параметры')
     except FileNotFoundError:
         print('Файл не найден')
-    # except ValueError:
-    #     print('Это не файл JSON')
+    except ValueError:
+        print('Это не файл JSON')
     else:
-        print_bar('Самый большой бар:', get_biggest_bar(bar_list))
-        # print_bar('Самый маленький бар:', get_smallest_bar(bar_list))
-        # print_bar('Самый близкий бар:', get_closest_bar(bar_list, longitude, latitude))
+        print_bar(get_biggest_bar(bar_list))
+        # print_bar(get_smallest_bar(bar_list))
+        # print_bar(get_closest_bar(bar_list, longitude, latitude))
