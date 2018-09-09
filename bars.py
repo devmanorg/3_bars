@@ -1,4 +1,3 @@
-import sys
 import json
 import inspect
 import argparse
@@ -27,14 +26,9 @@ def get_closest_bar(bar_data, longitude, latitude):
 
 
 def print_bar(bar_found):
-    # Get the calling function name to pick up an adjective
-    # from the features dictionary
+    # Get the calling function name to pick up an adjective from the features dictionary
     caller = inspect.stack()[1].code_context[0]
-    features = {
-        'biggest': 'большой',
-        'smallest': 'маленький',
-        'closest': 'близкий',
-    }
+    features = {'biggest': 'большой', 'smallest': 'маленький', 'closest': 'близкий'}
     adj = [desc for feat, desc in features.items() if feat in caller][0]
     print(
         'Самый {0} бар: {1},'.format(adj, bar_found['properties']['Attributes']['Name']),
@@ -47,8 +41,8 @@ def print_bar(bar_found):
 def get_args():
     parser = argparse.ArgumentParser()
     parser.add_argument('file')
-    parser.add_argument('longitude', type=float, default=0)
-    parser.add_argument('latitude', type=float, default=0)
+    parser.add_argument('longitude', type=float, nargs='?')
+    parser.add_argument('latitude', type=float, nargs='?')
     return parser.parse_args()
 
 
@@ -63,5 +57,3 @@ if __name__ == '__main__':
         print_bar(get_smallest_bar(bar_list))
     if args.longitude and args.latitude:
         print_bar(get_closest_bar(bar_list, args.longitude, args.latitude))
-
-    # 37.511560 55.745634
