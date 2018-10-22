@@ -1,5 +1,6 @@
 import json
 
+#there would be a function to load data using API
 
 def load_data(filepath):
     with open(filepath, encoding='utf-8') as data_file:
