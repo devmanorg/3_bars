@@ -7,18 +7,18 @@ def load_data(filepath):
     return json_loaded
 
 
-def get_biggest_bar(data):
-    return max(data["features"], key=lambda feature:
+def get_biggest_bar(bar):
+    return max(bar["features"], key=lambda feature:
     feature["properties"]["Attributes"]["SeatsCount"])
 
 
-def get_smallest_bar(data):
-    return min(data["features"], key=lambda feature:
+def get_smallest_bar(bar):
+    return min(bar["features"], key=lambda feature:
     feature["properties"]["Attributes"]["SeatsCount"])
 
 
-def get_closest_bar(data, longitude, latitude):
-    return min(data["features"], key=lambda feature:
+def get_closest_bar(bar, longitude, latitude):
+    return min(bar["features"], key=lambda feature:
     get_distance_of_two_points(feature["geometry"]["coordinates"], [longitude, latitude]))
 
 
@@ -27,12 +27,12 @@ def get_distance_of_two_points(bar_coordinate, your_coordinate):
 
 
 if __name__ == '__main__':
-    data = load_data(input('Укажите путь к файлу: '))
+    bar = load_data(input('Укажите путь к файлу: '))
     longitude = float(input("Введите долготу: "))
     latitude = float(input("Введите широту: "))
-    biggest_bar = get_biggest_bar(data)
-    smallest_bar = get_smallest_bar(data)
-    closest_bar = get_closest_bar(data, longitude, latitude)
+    biggest_bar = get_biggest_bar(bar)
+    smallest_bar = get_smallest_bar(bar)
+    closest_bar = get_closest_bar(bar, longitude, latitude)
     print("Самый большой бар: " + biggest_bar["properties"]["Attributes"]["Name"])
     print("Самый маленький бар: " + smallest_bar["properties"]["Attributes"]["Name"])
     print("Самый ближайший бар: " + closest_bar["properties"]["Attributes"]["Name"] + '. Находиться по адресу: ' +
