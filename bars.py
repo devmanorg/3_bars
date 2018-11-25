@@ -46,17 +46,17 @@ if __name__ == '__main__':
         bars = load_data(sys.argv[1])['features']
         longitude = float(input("Введите долготу: "))
         latitude = float(input("Введите широту: "))
+        selected_bars = {
+            'Самый большой бар:': get_biggest_bar(bars),
+            'Самый маленький бар:': get_smallest_bar(bars),
+            'Самый ближайший бар:': get_closest_bar(bars, longitude, latitude)
+        }
+        for title, bar in selected_bars.items():
+            print("{} {}. Находиться по адресу: {} и может вмещать посетителей: {}".format(
+                title, get_name(bar), get_address(bar), get_seats_count(bar)))
     except (FileNotFoundError, IndexError):
         print("Некоректно указан путь к файлу или файл не существует")
     except json.decoder.JSONDecodeError:
         print("Не корректное содержимое JSON файла")
     except ValueError:
         print("Координаты введены некорректно")
-    selected_bars = {
-        'Самый большой бар:': get_biggest_bar(bars),
-        'Самый маленький бар:': get_smallest_bar(bars),
-        'Самый ближайший бар:': get_closest_bar(bars, longitude, latitude)
-    }
-    for title, bar in selected_bars.items():
-        print("{} {}. Находиться по адресу: {} и может вмещать посетителей: {}".format(
-            title, get_name(bar), get_address(bar), get_seats_count(bar)))
