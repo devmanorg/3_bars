@@ -32,31 +32,38 @@ def get_smallest_bar(bar):
     return min(bar, key=get_seats_count)
 
 
-def get_closest_bar(bars, longitude, latitude):
+def get_closest_bar(bars, your_coordinate):
     return min(bars, key=lambda
-        bar: get_distance_of_two_points(get_coordinates(bar), [longitude, latitude]))
+        bar: get_distance_of_two_points(get_coordinates(bar), your_coordinate))
 
 
 def get_distance_of_two_points(bar_coordinate, your_coordinate):
     return (bar_coordinate[0] - your_coordinate[0]) ** 2 + (bar_coordinate[1] - your_coordinate[1]) ** 2
 
 
+def input_coorditane():
+    try:
+        longitude = float(input("Введите долготу: "))
+        latitude = float(input("Введите широту: "))
+        return longitude, latitude
+    except ValueError:
+        print("Координаты введены некорректно")
+
+
 if __name__ == '__main__':
     try:
         bars = load_data(sys.argv[1])['features']
-        longitude = float(input("Введите долготу: "))
-        latitude = float(input("Введите широту: "))
-        selected_bars = {
-            'Самый большой бар:': get_biggest_bar(bars),
-            'Самый маленький бар:': get_smallest_bar(bars),
-            'Самый ближайший бар:': get_closest_bar(bars, longitude, latitude)
-        }
-        for title, bar in selected_bars.items():
-            print("{} {}. Находиться по адресу: {} и может вмещать посетителей: {}".format(
-                title, get_name(bar), get_address(bar), get_seats_count(bar)))
     except (FileNotFoundError, IndexError):
         print("Некоректно указан путь к файлу или файл не существует")
     except json.decoder.JSONDecodeError:
         print("Не корректное содержимое JSON файла")
-    except ValueError:
-        print("Координаты введены некорректно")
+    your_coordinate = input_coorditane()
+
+    selected_bars = {
+        'Самый большой бар:': get_biggest_bar(bars),
+        'Самый маленький бар:': get_smallest_bar(bars),
+        'Самый ближайший бар:': get_closest_bar(bars, your_coordinate)
+    }
+    for title, bar in selected_bars.items():
+        print("{} {}. Находиться по адресу: {} и может вмещать посетителей: {}".format(
+            title, get_name(bar), get_address(bar), get_seats_count(bar)))
