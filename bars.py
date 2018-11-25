@@ -12,7 +12,7 @@ def get_coordinates(bar):
     return bar['geometry']['coordinates']
 
 
-def get_seat_count(bar):
+def get_seats_count(bar):
     return bar["properties"]["Attributes"]["SeatsCount"]
 
 
@@ -25,11 +25,11 @@ def get_address(bar):
 
 
 def get_biggest_bar(bar):
-    return max(bar, key=lambda bar: get_seat_count(bar))
+    return max(bar, key=get_seats_count)
 
 
 def get_smallest_bar(bar):
-    return min(bar, key=lambda bar: get_seat_count(bar))
+    return min(bar, key=get_seats_count)
 
 
 def get_closest_bar(bars, longitude, latitude):
@@ -38,8 +38,7 @@ def get_closest_bar(bars, longitude, latitude):
 
 
 def get_distance_of_two_points(bar_coordinate, your_coordinate):
-    return (bar_coordinate[0] - your_coordinate[0]) ** 2 + \
-           (bar_coordinate[1] - your_coordinate[1]) ** 2
+    return (bar_coordinate[0] - your_coordinate[0]) ** 2 + (bar_coordinate[1] - your_coordinate[1]) ** 2
 
 
 if __name__ == '__main__':
@@ -47,14 +46,17 @@ if __name__ == '__main__':
         bars = load_data(sys.argv[1])['features']
         longitude = float(input("Введите долготу: "))
         latitude = float(input("Введите широту: "))
-        biggest_bar = get_biggest_bar(bars)
-        smallest_bar = get_smallest_bar(bars)
-        closest_bar = get_closest_bar(bars, longitude, latitude)
-        print("Самый большой бар: " + get_name(biggest_bar))
-        print("Самый маленький бар: " + get_name(smallest_bar))
-        print("Самый ближайший бар: {} . Находиться по адресу: {}"
-              .format(get_name(closest_bar), get_address(closest_bar)))
     except (FileNotFoundError, IndexError):
-        print('Некоректно указан путь к файлу или файл не существует')
+        print("Некоректно указан путь к файлу или файл не существует")
     except json.decoder.JSONDecodeError:
-        print('Не корректное содержимое JSON файла')
+        print("Не корректное содержимое JSON файла")
+    except ValueError:
+        print("Координаты введены некорректно")
+    selected_bars = {
+        'Самый большой бар:': get_biggest_bar(bars),
+        'Самый маленький бар:': get_smallest_bar(bars),
+        'Самый ближайший бар:': get_closest_bar(bars, longitude, latitude)
+    }
+    for title, bar in selected_bars.items():
+        print("{} {}. Находиться по адресу: {} и может вмещать посетителей: {}".format(
+            title, get_name(bar), get_address(bar), get_seats_count(bar)))
