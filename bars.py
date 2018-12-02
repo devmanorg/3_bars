@@ -52,8 +52,19 @@ def get_user_coordinates():
         longitude = float(input("Введите долготу: "))
         latitude = float(input("Введите широту: "))
         return longitude, latitude
-    except ValueError:
+    except (TypeError, ValueError):
         print("Координаты введены некорректно")
+
+
+def get_result(your_coordinate, bars):
+    selected_bars = {
+        "Самый большой бар:": get_biggest_bar(bars),
+        "Самый маленький бар:": get_smallest_bar(bars),
+        "Самый ближайший бар:": get_closest_bar(bars, your_coordinate)
+    }
+    for title, bar in selected_bars.items():
+        print("{} {}. Находиться по адресу: {} и может вмещать посетителей: {}".format(
+            title, get_name(bar), get_address(bar), get_seats_count(bar)))
 
 
 if __name__ == "__main__":
@@ -61,16 +72,8 @@ if __name__ == "__main__":
         bars = load_data(sys.argv[1])["features"]
     except (FileNotFoundError, IndexError):
         print("Некоректно указан путь к файлу или файл не существует")
-    except TypeError and json.decoder.JSONDecodeError:
-        print("Не корректное имя или содержимое JSON файла")
+    except json.decoder.JSONDecodeError:
+        print("Не корректное содержимое JSON файла")
     else:
         your_coordinate = get_user_coordinates()
-        if your_coordinate is not None or bars is not None:
-            selected_bars = {
-                "Самый большой бар:": get_biggest_bar(bars),
-                "Самый маленький бар:": get_smallest_bar(bars),
-                "Самый ближайший бар:": get_closest_bar(bars, your_coordinate)
-            }
-            for title, bar in selected_bars.items():
-                print("{} {}. Находиться по адресу: {} и может вмещать посетителей: {}".format(
-                    title, get_name(bar), get_address(bar), get_seats_count(bar)))
+        get_result(your_coordinate, bars)
